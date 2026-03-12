@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>You Are Not Alone</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;600&family=Noto+Serif+KR:wght@300;400&family=Noto+Serif+JP:wght@300;400&family=Noto+Serif:ital,wght@0,300;0,400;1,300&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --ink:#1c1a17;--paper:#f8f4ee;--warm:#ede5d8;--muted:#8a7f73;
+  --accent:#7a4f2d;--sage:#5a6e52;--gold:#a8823a;--rust:#b84c30;
+  --border:#ddd5c5;--dark:#252220;
+}
+html{scroll-behavior:smooth;}
+body{background:var(--paper);color:var(--ink);font-family:'Noto Serif',Georgia,serif;font-weight:300;line-height:1.85;overflow-x:hidden;}
+
+/* LANG BAR */
+.lang-bar{position:fixed;top:0;width:100%;z-index:300;background:var(--ink);padding:9px 40px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.lang-label{font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);margin-right:8px;}
+.lang-btn{background:none;border:1px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.6);padding:4px 14px;font-size:12px;cursor:pointer;letter-spacing:0.04em;border-radius:1px;transition:all 0.2s;font-family:inherit;}
+.lang-btn:hover,.lang-btn.active{background:rgba(255,255,255,0.1);color:white;border-color:rgba(255,255,255,0.45);}
+
+/* NAV */
+nav{position:fixed;top:37px;width:100%;padding:14px 40px;display:flex;justify-content:space-between;align-items:center;z-index:200;background:rgba(248,244,238,0.97);border-bottom:1px solid var(--border);}
+.nav-logo{font-family:'Playfair Display',serif;font-size:17px;color:var(--ink);text-decoration:none;letter-spacing:0.02em;}
+.nav-links{display:flex;gap:0;list-style:none;}
+.nav-links a{font-size:11px;letter-spacing:0.13em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color 0.2s;padding:6px 18px;}
+.nav-links a:hover{color:var(--ink);}
+
+/* HERO */
+.hero{min-height:100vh;padding-top:100px;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;padding-left:clamp(32px,10vw,140px);padding-right:clamp(32px,10vw,140px);padding-bottom:80px;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;right:0;top:0;width:45%;height:100%;background:repeating-linear-gradient(135deg,transparent,transparent 40px,rgba(168,130,58,0.04) 40px,rgba(168,130,58,0.04) 41px);pointer-events:none;}
+.hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:var(--border);}
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px);}to{opacity:1;transform:translateY(0);}}
+.hero-eyebrow{font-size:11px;letter-spacing:0.3em;text-transform:uppercase;color:var(--gold);margin-bottom:24px;animation:fadeUp 0.8s ease both 0.1s;}
+.hero-title{font-family:'Playfair Display',serif;font-size:clamp(42px,7vw,88px);font-weight:700;line-height:1.05;margin-bottom:20px;max-width:700px;animation:fadeUp 0.8s ease both 0.2s;}
+.hero-title em{font-style:italic;color:var(--accent);}
+.hero-subtitle{font-size:clamp(16px,2vw,20px);color:var(--muted);margin-bottom:32px;font-style:italic;animation:fadeUp 0.8s ease both 0.3s;}
+.hero-body{font-size:17px;line-height:2;color:#3d3730;max-width:540px;margin-bottom:44px;animation:fadeUp 0.8s ease both 0.4s;}
+.cta-btn{display:inline-block;background:var(--ink);color:var(--paper);padding:15px 36px;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;text-decoration:none;transition:background 0.25s;animation:fadeUp 0.8s ease both 0.5s;}
+.cta-btn:hover{background:var(--accent);}
+
+/* STATS STRIP */
+.stats-strip{background:var(--ink);padding:52px clamp(32px,8vw,100px);display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:48px;}
+.stat-item{text-align:center;}
+.stat-num{font-family:'Playfair Display',serif;font-size:clamp(40px,5vw,60px);font-weight:700;color:var(--gold);line-height:1;margin-bottom:12px;}
+.stat-desc{font-size:13px;color:#8a8278;line-height:1.7;max-width:190px;margin:0 auto;}
+
+/* SECTION WRAPPERS */
+.section-outer{padding:clamp(60px,9vw,110px) clamp(32px,8vw,100px);}
+.section-outer.alt{background:#f0ebe0;}
+.section-outer.dark{background:var(--dark);}
+.section-outer.sage{background:var(--sage);}
+.section-outer.ink{background:var(--ink);}
+.section-inner{max-width:900px;margin:0 auto;}
+
+.section-label{font-size:10px;letter-spacing:0.32em;text-transform:uppercase;color:var(--gold);margin-bottom:14px;}
+h2{font-family:'Playfair Display',serif;font-size:clamp(26px,4.5vw,44px);font-weight:700;line-height:1.2;margin-bottom:24px;}
+h2 em{font-style:italic;color:var(--accent);}
+p{font-size:16px;line-height:2;color:#3d3730;margin-bottom:18px;}
+p:last-child{margin-bottom:0;}
+.divider{width:48px;height:2px;background:var(--gold);margin:28px 0;opacity:0.6;}
+
+/* HOW COMMON */
+.stat-cards{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:36px;}
+.stat-card{background:white;border:1px solid var(--border);padding:22px 20px;}
+.stat-card-num{font-family:'Playfair Display',serif;font-size:32px;color:var(--accent);line-height:1;margin-bottom:8px;}
+.stat-card-text{font-size:13px;color:var(--muted);line-height:1.65;margin:0;}
+
+/* CONFUCIAN VALUES */
+.conf-values{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:18px;margin-top:40px;}
+.cv-card{background:white;border-top:3px solid var(--sage);padding:26px 22px;transition:transform 0.25s;}
+.cv-card:hover{transform:translateY(-3px);}
+.cv-value{font-family:'Playfair Display',serif;font-size:18px;font-style:italic;color:var(--sage);margin-bottom:4px;}
+.cv-zh{font-size:12px;color:var(--muted);letter-spacing:0.1em;margin-bottom:14px;}
+.cv-desc{font-size:14px;line-height:1.75;color:#4a4540;margin-bottom:12px;}
+.cv-tension{font-size:13px;color:var(--rust);font-style:italic;border-top:1px solid var(--border);padding-top:12px;line-height:1.6;margin:0;}
+.conf-note{background:var(--sage);color:white;padding:32px 36px;margin-top:40px;}
+.conf-note p{color:rgba(255,255,255,0.9);font-size:16px;margin:0;}
+
+/* FEELINGS */
+.feelings-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-top:36px;}
+.feeling-card{background:white;border:1px solid var(--border);padding:24px 20px;transition:box-shadow 0.25s,transform 0.25s;}
+.feeling-card:hover{box-shadow:0 8px 32px rgba(0,0,0,0.07);transform:translateY(-3px);}
+.feeling-en{font-family:'Playfair Display',serif;font-size:18px;font-style:italic;margin-bottom:10px;color:var(--ink);}
+.feeling-desc{font-size:14px;color:var(--muted);line-height:1.7;margin:0;}
+
+/* REFRAME */
+.reframe-header{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-bottom:2px;}
+.rh-cell{padding:12px 26px;font-size:10px;letter-spacing:0.25em;text-transform:uppercase;}
+.rh-cell.old{color:rgba(255,255,255,0.3);background:rgba(255,255,255,0.03);}
+.rh-cell.new{color:var(--gold);background:rgba(168,130,58,0.12);}
+.reframe-grid{display:grid;gap:2px;margin-top:36px;}
+.reframe-row{display:grid;grid-template-columns:1fr 1fr;gap:2px;}
+.rc{padding:22px 26px;}
+.rc.old{background:rgba(255,255,255,0.04);border-left:3px solid rgba(255,255,255,0.1);}
+.rc.new{background:rgba(255,255,255,0.07);border-left:3px solid var(--gold);}
+.rc p{font-size:15px;line-height:1.8;margin:0;}
+.rc.old p{color:#656260;font-style:italic;}
+.rc.new p{color:#ccc5b5;}
+
+/* PARENTS */
+.parents-letter{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-left:3px solid var(--gold);padding:32px 36px;margin-top:36px;}
+.parents-letter p{color:#c0b5a8;font-style:italic;font-size:16px;line-height:2;}
+.parents-letter .sign-off{font-style:normal;font-size:13px;color:var(--muted);margin-top:14px;letter-spacing:0.04em;}
+.myth-cards{display:grid;gap:12px;margin-top:28px;}
+.myth-card{display:grid;grid-template-columns:1fr 1fr;overflow:hidden;border:1px solid rgba(255,255,255,0.07);}
+.mc{padding:24px 26px;}
+.mc.myth{background:rgba(184,76,48,0.14);border-right:1px solid rgba(255,255,255,0.07);}
+.mc.truth{background:rgba(90,110,82,0.2);}
+.mc-tag{font-size:9px;letter-spacing:0.25em;text-transform:uppercase;margin-bottom:12px;}
+.mc.myth .mc-tag{color:var(--rust);}
+.mc.truth .mc-tag{color:#8aad7e;}
+.mc p{font-size:15px;line-height:1.75;margin:0;color:#c0b8b0;}
+.parent-tips{border:1px solid rgba(255,255,255,0.1);padding:28px 32px;margin-top:36px;}
+.parent-tips ul{list-style:none;margin-top:18px;}
+.parent-tips li{display:flex;gap:14px;margin-bottom:16px;color:#b5aca0;font-size:15px;line-height:1.75;}
+.parent-tips li:last-child{margin-bottom:0;}
+.tip-arrow{color:var(--gold);flex-shrink:0;margin-top:3px;}
+
+/* RESOURCES */
+.resource-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px;margin-top:40px;}
+.resource-card{border:1px solid var(--border);padding:24px 22px;text-decoration:none;color:inherit;display:block;background:white;transition:transform 0.2s,box-shadow 0.2s;}
+.resource-card:hover{transform:translateY(-3px);box-shadow:0 10px 30px rgba(0,0,0,0.07);}
+.res-tag{font-size:9px;letter-spacing:0.25em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;}
+.res-name{font-family:'Playfair Display',serif;font-size:19px;margin-bottom:10px;color:var(--ink);}
+.res-desc{font-size:13px;color:var(--muted);line-height:1.7;margin:0;}
+.res-link{font-size:11px;color:var(--accent);margin-top:12px;letter-spacing:0.07em;}
+
+/* STEPS */
+.steps-list{list-style:none;margin-top:40px;}
+.steps-list li{display:grid;grid-template-columns:68px 1fr;gap:20px;margin-bottom:28px;align-items:start;}
+.step-num{font-family:'Playfair Display',serif;font-size:44px;color:rgba(255,255,255,0.2);line-height:1;}
+.step-body h3{font-family:'Playfair Display',serif;font-size:20px;color:white;margin-bottom:8px;font-weight:400;}
+.step-body p{color:rgba(255,255,255,0.72);font-size:15px;}
+
+/* CLOSING */
+.closing{text-align:center;padding:clamp(80px,12vw,140px) 40px;background:var(--paper);}
+.closing h2{max-width:580px;margin:0 auto 20px;}
+.closing-sub{color:var(--muted);max-width:420px;margin:0 auto 40px;font-size:16px;}
+.crisis-box{display:inline-block;border:1px solid var(--accent);padding:22px 48px;}
+.crisis-box .crisis-label{font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;}
+.crisis-box a{font-family:'Playfair Display',serif;font-size:38px;color:var(--accent);text-decoration:none;display:block;line-height:1.1;}
+.crisis-box .crisis-sub-text{font-size:12px;color:var(--muted);margin-top:8px;text-transform:none;letter-spacing:0;}
+
+footer{background:var(--ink);color:#5a5248;text-align:center;padding:30px 24px;font-size:13px;line-height:2;}
+footer a{color:var(--gold);text-decoration:none;}
+
+/* dark section text overrides */
+.section-outer.dark h2,.section-outer.ink h2{color:var(--paper);}
+.section-outer.dark p,.section-outer.ink p{color:#b5aca0;}
+.section-outer.dark .section-label,.section-outer.ink .section-label{color:var(--gold);}
+.section-outer.sage h2{color:white;}
+.section-outer.sage .section-label{color:rgba(255,255,255,0.55);}
+.section-outer.sage p{color:rgba(255,255,255,0.75);}
+.section-outer.alt p{color:#3d3730;}
+
+@media(max-width:760px){
+  .hero{padding-left:24px;padding-right:24px;}
+  .stats-strip{padding:40px 24px;gap:32px;}
+  .section-outer{padding:60px 24px;}
+  .stat-cards{grid-template-columns:1fr 1fr;}
+  .reframe-row,.myth-card{grid-template-columns:1fr;}
+  .mc.myth{border-right:none;border-bottom:1px solid rgba(255,255,255,0.07);}
+  .reframe-header{grid-template-columns:1fr;}
+  nav .nav-links{display:none;}
+  .lang-bar{padding:9px 20px;}
+  nav{padding:14px 20px;top:37px;}
+}
+</style>
+</head>
+<body>
+
+<!-- LANGUAGE BAR -->
+<div class="lang-bar">
+  <span class="lang-label">Language</span>
+  <button class="lang-btn active" onclick="setLang('en')">English</button>
+  <button class="lang-btn" onclick="setLang('zh')">中文</button>
+  <button class="lang-btn" onclick="setLang('ko')">한국어</button>
+  <button class="lang-btn" onclick="setLang('ja')">日本語</button>
+  <button class="lang-btn" onclick="setLang('vi')">Tiếng Việt</button>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#top" data-key="navLogo">You Are Not Alone</a>
+  <ul class="nav-links">
+    <li><a href="#how-common" data-key="navCommon">How Common</a></li>
+    <li><a href="#culture" data-key="navCulture">Culture &amp; Values</a></li>
+    <li><a href="#parents" data-key="navParents">For Parents</a></li>
+    <li><a href="#resources" data-key="navResources">Resources</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="top" class="hero">
+  <p class="hero-eyebrow" data-key="eyebrow">Mental Wellbeing · Asian Communities</p>
+  <h1 class="hero-title" data-key="heroTitle">You Are <em>Not Alone</em> in This.</h1>
+  <p class="hero-subtitle" data-key="heroSubtitle">Struggling does not mean you have failed.</p>
+  <p class="hero-body" data-key="heroBody">Many young Asian Americans carry invisible weight — the pressure to achieve, to hold the family together, to never show weakness. If something feels heavy inside, that feeling deserves care. And you deserve support.</p>
+  <a class="cta-btn" href="#how-common" data-key="ctaBtn">Learn More</a>
+</section>
+
+<!-- STATS STRIP -->
+<div class="stats-strip">
+  <div class="stat-item">
+    <div class="stat-num">45%</div>
+    <p class="stat-desc" data-key="stat1">less likely to receive mental health treatment than the average American</p>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">70%</div>
+    <p class="stat-desc" data-key="stat2">of young people with a psychiatric illness in Confucian-influenced societies receive no treatment</p>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">25%</div>
+    <p class="stat-desc" data-key="stat3">of Asian Americans with diagnosable conditions seek care, vs. 50% of white Americans</p>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">#1</div>
+    <p class="stat-desc" data-key="stat4">cause of death for Asian Americans aged 15–24 is suicide — yet most receive no support beforehand</p>
+  </div>
+</div>
+
+<!-- HOW COMMON -->
+<section id="how-common" class="section-outer">
+  <div class="section-inner">
+    <p class="section-label" data-key="commonLabel">You are not unusual</p>
+    <h2 data-key="commonTitle">This is far more <em>common</em> than you think.</h2>
+    <div class="divider"></div>
+    <p data-key="commonP1">Depression and anxiety among young Asian Americans occur at similar rates to the general population. The difference is not how many people struggle — it is how many feel they can ask for help.</p>
+    <p data-key="commonP2">Because of cultural pressures to appear well, most people around you are also quietly managing more than they show. The person next to you in class, your coworker, your friend — statistically, many of them carry the same weight.</p>
+    <p data-key="commonP3">The silence around mental health in Asian communities does not mean the pain is not there. It means it goes unseen and untreated. That silence has a cost — and you do not have to be part of it.</p>
+    <div class="stat-cards">
+      <div class="stat-card">
+        <div class="stat-card-num">1 in 5</div>
+        <p class="stat-card-text" data-key="sc1">adults in the US experience a mental health condition each year — across every background</p>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-num">18–25</div>
+        <p class="stat-card-text" data-key="sc2">is the age range with the highest rates of anxiety and depression — affecting all ethnicities</p>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-num">31%</div>
+        <p class="stat-card-text" data-key="sc3">of people in China view mental health positively — cultural stigma is a shared regional reality</p>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-num">2×</div>
+        <p class="stat-card-text" data-key="sc4">Asian Americans are twice as unlikely to seek help compared to white peers with the same diagnosis</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONFUCIAN VALUES -->
+<section id="culture" class="section-outer alt">
+  <div class="section-inner">
+    <p class="section-label" data-key="confLabel">Understanding the context</p>
+    <h2 data-key="confTitle">How Confucian values shape our relationship with <em>asking for help</em>.</h2>
+    <div class="divider"></div>
+    <p data-key="confP1">Confucian philosophy has shaped family and social life across China, Korea, Japan, Vietnam, and their diaspora communities for over two thousand years. These values are a genuine source of strength, community, and identity. But when applied to mental health, they can create invisible barriers that are hard to name — and harder to overcome.</p>
+    <p data-key="confP2">Understanding where these barriers come from is the first step to moving through them — without abandoning the values that matter to you.</p>
+    <div class="conf-values">
+      <div class="cv-card">
+        <div class="cv-value" data-key="cv1name">Filial Piety</div>
+        <div class="cv-zh">孝 / 효 / 孝行 / Hiếu thảo</div>
+        <p class="cv-desc" data-key="cv1desc">Deep respect and loyalty to parents and ancestors is a core virtue. Family honour is collective — individual actions reflect on everyone.</p>
+        <p class="cv-tension" data-key="cv1tension">This can lead to hiding struggles to avoid "shaming" the family, or feeling that outside help is a betrayal of loyalty.</p>
+      </div>
+      <div class="cv-card">
+        <div class="cv-value" data-key="cv2name">Self-Restraint</div>
+        <div class="cv-zh">克己 / 극기 / 克己 / Tự kiềm chế</div>
+        <p class="cv-desc" data-key="cv2desc">Emotional discipline and inner control are signs of virtue. Expressing distress openly can be seen as a lack of self-mastery.</p>
+        <p class="cv-tension" data-key="cv2tension">Struggling emotionally becomes framed as a personal failure — a lack of discipline — rather than a human and medical reality.</p>
+      </div>
+      <div class="cv-card">
+        <div class="cv-value" data-key="cv3name">Face (面子)</div>
+        <div class="cv-zh">面子 / 체면 / 面目 / Thể diện</div>
+        <p class="cv-desc" data-key="cv3desc">Social standing and reputation — for both individual and family — are deeply important. Maintaining face shapes many decisions.</p>
+        <p class="cv-tension" data-key="cv3tension">Mental health treatment is avoided because it feels like admitting something that could damage the family's image in the community.</p>
+      </div>
+      <div class="cv-card">
+        <div class="cv-value" data-key="cv4name">Harmony</div>
+        <div class="cv-zh">和 / 화 / 和 / Hòa thuận</div>
+        <p class="cv-desc" data-key="cv4desc">Social and family harmony is valued above individual expression. Disrupting the peace — even to address real suffering — can feel wrong.</p>
+        <p class="cv-tension" data-key="cv4tension">Young people suppress symptoms to avoid disrupting family dynamics, especially if parents might be dismissive of mental health concerns.</p>
+      </div>
+    </div>
+    <div class="conf-note">
+      <p data-key="confNote"><strong style="color:white;">These values are not the enemy.</strong> Filial piety, restraint, and harmony are genuine virtues. The goal is not to discard them — but to expand what they allow. Caring for your mental health <em>is</em> an act of filial piety: it lets you be more present, more stable, and more capable of showing up for the people you love.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FEELINGS -->
+<section class="section-outer">
+  <div class="section-inner">
+    <p class="section-label" data-key="feelLabel">What you might be carrying</p>
+    <h2 data-key="feelTitle">These feelings are real — and they have names.</h2>
+    <p data-key="feelIntro">If any of these sound familiar, you are not imagining it. And you are not alone.</p>
+    <div class="feelings-grid">
+      <div class="feeling-card"><div class="feeling-en" data-key="f1name">Exhaustion</div><p class="feeling-desc" data-key="f1">Tired in a way sleep cannot fix. Worn out by performing wellness while feeling anything but.</p></div>
+      <div class="feeling-card"><div class="feeling-en" data-key="f2name">Loneliness</div><p class="feeling-desc" data-key="f2">Surrounded by people, but unable to show what is really happening inside. No safe place to be honest.</p></div>
+      <div class="feeling-card"><div class="feeling-en" data-key="f3name">Pressure</div><p class="feeling-desc" data-key="f3">The weight of family expectations, academic demands, and the model minority standard.</p></div>
+      <div class="feeling-card"><div class="feeling-en" data-key="f4name">Between Worlds</div><p class="feeling-desc" data-key="f4">Caught between cultures — not fully belonging to either. Unsure which version of yourself is real.</p></div>
+      <div class="feeling-card"><div class="feeling-en" data-key="f5name">Numbness</div><p class="feeling-desc" data-key="f5">Feeling disconnected, going through the motions. Like something is switched off inside.</p></div>
+      <div class="feeling-card"><div class="feeling-en" data-key="f6name">Shame</div><p class="feeling-desc" data-key="f6">The belief that feeling this way means something is fundamentally wrong with you. It does not. It never did.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- REFRAME -->
+<section class="section-outer ink">
+  <div class="section-inner">
+    <p class="section-label" data-key="reframeLabel">Shifting the lens</p>
+    <h2 data-key="reframeTitle">Thoughts that keep us silent — and another way to hold them.</h2>
+    <div class="reframe-grid">
+      <div class="reframe-header">
+        <div class="rh-cell old" data-key="rOldH">The familiar thought</div>
+        <div class="rh-cell new" data-key="rNewH">Another way to see it</div>
+      </div>
+      <div class="reframe-row">
+        <div class="rc old"><p data-key="r1o">"I should handle this on my own. Asking for help is weakness."</p></div>
+        <div class="rc new"><p data-key="r1n">Seeking support is discipline — the discipline to care for yourself so you can carry your responsibilities fully. The strongest people recognise their limits.</p></div>
+      </div>
+      <div class="reframe-row">
+        <div class="rc old"><p data-key="r2o">"If my family finds out I am in therapy, they will be ashamed."</p></div>
+        <div class="rc new"><p data-key="r2n">Mental health care is confidential. You have the right to make decisions about your own health privately. Many people seek help without anyone in their family knowing.</p></div>
+      </div>
+      <div class="reframe-row">
+        <div class="rc old"><p data-key="r3o">"Other people have it worse. I do not deserve to complain."</p></div>
+        <div class="rc new"><p data-key="r3n">Pain is not a competition. Your experience is real and valid on its own terms. Others suffering more does not make yours less deserving of care.</p></div>
+      </div>
+      <div class="reframe-row">
+        <div class="rc old"><p data-key="r4o">"This is just stress. Everyone feels like this. It will pass."</p></div>
+        <div class="rc new"><p data-key="r4n">Some stress is normal. But persistent exhaustion or anxiety that disrupts your life is a signal worth listening to — not pushing through alone.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PARENTS -->
+<section id="parents" class="section-outer dark">
+  <div class="section-inner">
+    <p class="section-label" data-key="parentsLabel">For parents &amp; guardians</p>
+    <h2 data-key="parentsTitle">Your child is not <em>broken</em>. And neither are you.</h2>
+    <div class="divider" style="background:var(--gold);"></div>
+    <p data-key="parentsIntro">If your child has told you they are struggling — or if you have sensed something is wrong — it can feel frightening and confusing, especially if mental health was never discussed openly in your own upbringing. This section is for you.</p>
+    <div class="parents-letter">
+      <p data-key="parentsLetter">"You raised your children to be strong. To work hard. To make the family proud. When they come to you and say they are struggling, it can feel like a failure — yours or theirs. But it is neither. It means they trust you enough to tell you. That trust is the most important thing. Please do not turn it away."</p>
+      <p class="sign-off" data-key="parentsSign">— A message to every parent who wants to understand</p>
+    </div>
+
+    <div style="margin-top:52px;">
+      <p class="section-label" data-key="mythsLabel">Common beliefs — and what the evidence shows</p>
+      <h2 style="font-size:clamp(20px,3.5vw,32px);" data-key="mythsTitle">Stereotypes and stigmas that get in the way</h2>
+      <div class="myth-cards">
+        <div class="myth-card">
+          <div class="mc myth"><div class="mc-tag" data-key="mythTag">Common Belief</div><p data-key="m1m">"Mental illness is the result of weak character or lack of self-discipline."</p></div>
+          <div class="mc truth"><div class="mc-tag" data-key="truthTag">What we know</div><p data-key="m1t">Mental health conditions are medical realities with biological, environmental, and social causes — the same as diabetes or a broken bone. Character has nothing to do with it.</p></div>
+        </div>
+        <div class="myth-card">
+          <div class="mc myth"><div class="mc-tag" data-key="mythTag2">Common Belief</div><p data-key="m2m">"Asian families do not have these problems. This is a Western concept."</p></div>
+          <div class="mc truth"><div class="mc-tag" data-key="truthTag2">What we know</div><p data-key="m2t">Depression and anxiety are global conditions. Young people across East and Southeast Asia experience mental health conditions at similar rates — they are simply far less likely to receive treatment.</p></div>
+        </div>
+        <div class="myth-card">
+          <div class="mc myth"><div class="mc-tag" data-key="mythTag3">Common Belief</div><p data-key="m3m">"If they eat well, exercise, and focus on their studies, they will be fine."</p></div>
+          <div class="mc truth"><div class="mc-tag" data-key="truthTag3">What we know</div><p data-key="m3t">Healthy habits support wellbeing but cannot replace treatment for clinical depression or anxiety. Telling someone to "try harder" when they are struggling medically can deepen their distress.</p></div>
+        </div>
+        <div class="myth-card">
+          <div class="mc myth"><div class="mc-tag" data-key="mythTag4">Common Belief</div><p data-key="m4m">"Seeing a therapist means the whole community will know. It brings shame to the family."</p></div>
+          <div class="mc truth"><div class="mc-tag" data-key="truthTag4">What we know</div><p data-key="m4t">Mental health care is legally confidential. Therapists cannot share your child's information without consent. Seeking help is a private decision — and one that often prevents far greater crises later.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="parent-tips">
+      <p class="section-label" data-key="tipsLabel">If your child comes to you</p>
+      <ul>
+        <li><span class="tip-arrow">→</span><span data-key="t1">Listen without immediately trying to fix. Being heard is often the most healing thing.</span></li>
+        <li><span class="tip-arrow">→</span><span data-key="t2">Avoid phrases like "you have nothing to be sad about" or "think of how hard I worked for you." These shut down conversation.</span></li>
+        <li><span class="tip-arrow">→</span><span data-key="t3">Ask: "What do you need from me right now?" Let them guide you.</span></li>
+        <li><span class="tip-arrow">→</span><span data-key="t4">Supporting them in accessing professional care is one of the most loving things you can do as a parent.</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- RESOURCES -->
+<section id="resources" class="section-outer">
+  <div class="section-inner">
+    <p class="section-label" data-key="resLabel">Where to begin</p>
+    <h2 data-key="resTitle">Resources that <em>understand</em> you.</h2>
+    <p data-key="resIntro">You do not have to find a therapist tomorrow. Start small — read, listen, reach out anonymously. Every step counts.</p>
+    <div class="resource-grid">
+      <a class="resource-card" href="https://988lifeline.org" target="_blank" rel="noopener">
+        <div class="res-tag">Crisis Support · 24/7</div>
+        <div class="res-name">988 Lifeline</div>
+        <p class="res-desc" data-key="res1">Call or text 988. Free, confidential. Available in Mandarin and Cantonese. No insurance needed.</p>
+        <div class="res-link">988lifeline.org →</div>
+      </a>
+      <a class="resource-card" href="https://www.asianmhc.org" target="_blank" rel="noopener">
+        <div class="res-tag">Culturally Specific</div>
+        <div class="res-name">Asian Mental Health Collective</div>
+        <p class="res-desc" data-key="res2">Find therapists who understand your cultural background. Built by and for Asian communities.</p>
+        <div class="res-link">asianmhc.org →</div>
+      </a>
+      <a class="resource-card" href="https://www.nami.org" target="_blank" rel="noopener">
+        <div class="res-tag">Education · AAPI</div>
+        <div class="res-name">NAMI AAPI</div>
+        <p class="res-desc" data-key="res3">Culturally informed mental health education and peer support for Asian American communities.</p>
+        <div class="res-link">nami.org →</div>
+      </a>
+      <a class="resource-card" href="https://www.7cups.com" target="_blank" rel="noopener">
+        <div class="res-tag">Anonymous · Free</div>
+        <div class="res-name">7 Cups</div>
+        <p class="res-desc" data-key="res4">Talk to a trained listener, anonymously and for free. No appointment needed — just a conversation.</p>
+        <div class="res-link">7cups.com →</div>
+      </a>
+      <a class="resource-card" href="https://www.thetrevorproject.org" target="_blank" rel="noopener">
+        <div class="res-tag">Youth · LGBTQ+ Inclusive</div>
+        <div class="res-name">The Trevor Project</div>
+        <p class="res-desc" data-key="res5">Crisis support for LGBTQ+ young people navigating family and cultural pressures.</p>
+        <div class="res-link">thetrevorproject.org →</div>
+      </a>
+      <a class="resource-card" href="https://www.psychologytoday.com/us/therapists/asian" target="_blank" rel="noopener">
+        <div class="res-tag">Find a Therapist</div>
+        <div class="res-name">Psychology Today</div>
+        <p class="res-desc" data-key="res6">Search therapists with Asian cultural competency by location, language, and insurance coverage.</p>
+        <div class="res-link">psychologytoday.com →</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- STEPS -->
+<section class="section-outer sage">
+  <div class="section-inner">
+    <p class="section-label" data-key="stepsLabel">Starting small</p>
+    <h2 data-key="stepsTitle">You do not need to have it all figured out. Start here.</h2>
+    <ul class="steps-list">
+      <li><span class="step-num">01</span><div class="step-body"><h3 data-key="s1h">Name what you are feeling</h3><p data-key="s1p">Simply acknowledging "I have been struggling" — even just to yourself — is a real and meaningful first step.</p></div></li>
+      <li><span class="step-num">02</span><div class="step-body"><h3 data-key="s2h">Explore anonymously</h3><p data-key="s2p">Read something. Try a free resource. Browse. No commitment, no one needs to know.</p></div></li>
+      <li><span class="step-num">03</span><div class="step-body"><h3 data-key="s3h">Reach out, in your own time</h3><p data-key="s3p">When you are ready, reaching out to a support line is confidential. You decide how much to share.</p></div></li>
+      <li><span class="step-num">04</span><div class="step-body"><h3 data-key="s4h">Pass this on</h3><p data-key="s4p">If someone you know might be quietly struggling, sharing this page could be the most important thing you do today.</p></div></li>
+    </ul>
+  </div>
+</section>
+
+<!-- CLOSING -->
+<div class="closing">
+  <p class="section-label" data-key="closingLabel">A final thought</p>
+  <h2 data-key="closingTitle">Caring for yourself is how you care for everyone you love.</h2>
+  <p class="closing-sub" data-key="closingSub">If you or someone you know needs to speak to someone right now, please reach out.</p>
+  <div class="crisis-box">
+    <p class="crisis-label" data-key="crisisLabel">Call or text, 24/7 — free &amp; confidential</p>
+    <a href="tel:988">988</a>
+    <p class="crisis-sub-text" data-key="crisisSub">Suicide &amp; Crisis Lifeline · Mandarin &amp; Cantonese available</p>
+  </div>
+</div>
+
+<footer>
+  <p data-key="footer1">This page was created to support mental wellbeing in Asian American communities.</p>
+  <p>Information here does not replace professional advice. In crisis, call <a href="tel:988">988</a> immediately.</p>
+  <p style="margin-top:10px;font-size:11px;opacity:0.35;" data-key="footerShare">Share freely · 자유롭게 공유 · 自由に共有 · Tự do chia sẻ · 自由分享</p>
+</footer>
+
+<script>
+// Full translation object — EN is the fallback base, other langs override
+const T = {
+  en: {
+    navLogo:"You Are Not Alone", navCommon:"How Common", navCulture:"Culture & Values", navParents:"For Parents", navResources:"Resources",
+    eyebrow:"Mental Wellbeing · Asian Communities",
+    heroTitle:"You Are <em>Not Alone</em> in This.",
+    heroSubtitle:"Struggling does not mean you have failed.",
+    heroBody:"Many young Asian Americans carry invisible weight — the pressure to achieve, to hold the family together, to never show weakness. If something feels heavy inside, that feeling deserves care. And you deserve support.",
+    ctaBtn:"Learn More",
+    stat1:"less likely to receive mental health treatment than the average American",
+    stat2:"of young people with a psychiatric illness in Confucian-influenced societies receive no treatment",
+    stat3:"of Asian Americans with diagnosable conditions seek care, vs. 50% of white Americans",
+    stat4:"cause of death for Asian Americans aged 15–24 is suicide — yet most receive no support beforehand",
+    commonLabel:"You are not unusual",
+    commonTitle:"This is far more <em>common</em> than you think.",
+    commonP1:"Depression and anxiety among young Asian Americans occur at similar rates to the general population. The difference is not how many people struggle — it is how many feel they can ask for help.",
+    commonP2:"Because of cultural pressures to appear well, most people around you are also quietly managing more than they show. The person next to you in class, your coworker, your friend — statistically, many of them carry the same weight.",
+    commonP3:"The silence around mental health in Asian communities does not mean the pain is not there. It means it goes unseen and untreated. That silence has a cost — and you do not have to be part of it.",
+    sc1:"adults in the US experience a mental health condition each year — across every background",
+    sc2:"is the age range with the highest rates of anxiety and depression — affecting all ethnicities",
+    sc3:"of people in China view mental health positively — cultural stigma is a shared regional reality",
+    sc4:"Asian Americans are twice as unlikely to seek help compared to white peers with the same diagnosis",
+    confLabel:"Understanding the context",
+    confTitle:"How Confucian values shape our relationship with <em>asking for help</em>.",
+    confP1:"Confucian philosophy has shaped family and social life across China, Korea, Japan, Vietnam, and their diaspora communities for over two thousand years. These values are a genuine source of strength, community, and identity. But when applied to mental health, they can create invisible barriers that are hard to name — and harder to overcome.",
+    confP2:"Understanding where these barriers come from is the first step to moving through them — without abandoning the values that matter to you.",
+    cv1name:"Filial Piety", cv1desc:"Deep respect and loyalty to parents and ancestors is a core virtue. Family honour is collective — individual actions reflect on everyone.", cv1tension:"This can lead to hiding struggles to avoid 'shaming' the family, or feeling that outside help is a betrayal of loyalty.",
+    cv2name:"Self-Restraint", cv2desc:"Emotional discipline and inner control are signs of virtue. Expressing distress openly can be seen as a lack of self-mastery.", cv2tension:"Struggling emotionally becomes framed as a personal failure — a lack of discipline — rather than a human and medical reality.",
+    cv3name:"Face (面子)", cv3desc:"Social standing and reputation — for both individual and family — are deeply important. Maintaining face shapes many decisions.", cv3tension:"Mental health treatment is avoided because it feels like admitting something that could damage the family's image in the community.",
+    cv4name:"Harmony", cv4desc:"Social and family harmony is valued above individual expression. Disrupting the peace — even to address real suffering — can feel wrong.", cv4tension:"Young people suppress symptoms to avoid disrupting family dynamics, especially if parents might be dismissive of mental health concerns.",
+    confNote:"<strong style='color:white;'>These values are not the enemy.</strong> Filial piety, restraint, and harmony are genuine virtues. The goal is not to discard them — but to expand what they allow. Caring for your mental health <em>is</em> an act of filial piety: it lets you be more present, more stable, and more capable of showing up for the people you love.",
+    feelLabel:"What you might be carrying",
+    feelTitle:"These feelings are real — and they have names.",
+    feelIntro:"If any of these sound familiar, you are not imagining it. And you are not alone.",
+    f1name:"Exhaustion", f1:"Tired in a way sleep cannot fix. Worn out by performing wellness while feeling anything but.",
+    f2name:"Loneliness", f2:"Surrounded by people, but unable to show what is really happening inside. No safe place to be honest.",
+    f3name:"Pressure", f3:"The weight of family expectations, academic demands, and the model minority standard.",
+    f4name:"Between Worlds", f4:"Caught between cultures — not fully belonging to either. Unsure which version of yourself is real.",
+    f5name:"Numbness", f5:"Feeling disconnected, going through the motions. Like something is switched off inside.",
+    f6name:"Shame", f6:"The belief that feeling this way means something is fundamentally wrong with you. It does not. It never did.",
+    reframeLabel:"Shifting the lens",
+    reframeTitle:"Thoughts that keep us silent — and another way to hold them.",
+    rOldH:"The familiar thought", rNewH:"Another way to see it",
+    r1o:"\"I should handle this on my own. Asking for help is weakness.\"",
+    r1n:"Seeking support is discipline — the discipline to care for yourself so you can carry your responsibilities fully. The strongest people recognise their limits.",
+    r2o:"\"If my family finds out I am in therapy, they will be ashamed.\"",
+    r2n:"Mental health care is confidential. You have the right to make decisions about your own health privately. Many people seek help without anyone in their family knowing.",
+    r3o:"\"Other people have it worse. I do not deserve to complain.\"",
+    r3n:"Pain is not a competition. Your experience is real and valid on its own terms. Others suffering more does not make yours less deserving of care.",
+    r4o:"\"This is just stress. Everyone feels like this. It will pass.\"",
+    r4n:"Some stress is normal. But persistent exhaustion or anxiety that disrupts your life is a signal worth listening to — not pushing through alone.",
+    parentsLabel:"For parents & guardians",
+    parentsTitle:"Your child is not <em>broken</em>. And neither are you.",
+    parentsIntro:"If your child has told you they are struggling — or if you have sensed something is wrong — it can feel frightening and confusing, especially if mental health was never discussed openly in your own upbringing. This section is for you.",
+    parentsLetter:"\"You raised your children to be strong. To work hard. To make the family proud. When they come to you and say they are struggling, it can feel like a failure — yours or theirs. But it is neither. It means they trust you enough to tell you. That trust is the most important thing. Please do not turn it away.\"",
+    parentsSign:"— A message to every parent who wants to understand",
+    mythsLabel:"Common beliefs — and what the evidence shows",
+    mythsTitle:"Stereotypes and stigmas that get in the way",
+    mythTag:"Common Belief", truthTag:"What we know",
+    mythTag2:"Common Belief", truthTag2:"What we know",
+    mythTag3:"Common Belief", truthTag3:"What we know",
+    mythTag4:"Common Belief", truthTag4:"What we know",
+    m1m:"\"Mental illness is the result of weak character or lack of self-discipline.\"",
+    m1t:"Mental health conditions are medical realities with biological, environmental, and social causes — the same as diabetes or a broken bone. Character has nothing to do with it.",
+    m2m:"\"Asian families do not have these problems. This is a Western concept.\"",
+    m2t:"Depression and anxiety are global conditions. Young people across East and Southeast Asia experience mental health conditions at similar rates — they are simply far less likely to receive treatment.",
+    m3m:"\"If they eat well, exercise, and focus on their studies, they will be fine.\"",
+    m3t:"Healthy habits support wellbeing but cannot replace treatment for clinical depression or anxiety. Telling someone to 'try harder' when they are struggling medically can deepen their distress.",
+    m4m:"\"Seeing a therapist means the whole community will know. It brings shame to the family.\"",
+    m4t:"Mental health care is legally confidential. Therapists cannot share your child's information without consent. Seeking help is a private decision — and one that often prevents far greater crises later.",
+    tipsLabel:"If your child comes to you",
+    t1:"Listen without immediately trying to fix. Being heard is often the most healing thing.",
+    t2:"Avoid phrases like \"you have nothing to be sad about\" or \"think of how hard I worked for you.\" These shut down conversation.",
+    t3:"Ask: \"What do you need from me right now?\" Let them guide you.",
+    t4:"Supporting them in accessing professional care is one of the most loving things you can do as a parent.",
+    resLabel:"Where to begin",
+    resTitle:"Resources that <em>understand</em> you.",
+    resIntro:"You do not have to find a therapist tomorrow. Start small — read, listen, reach out anonymously. Every step counts.",
+    res1:"Call or text 988. Free, confidential. Available in Mandarin and Cantonese. No insurance needed.",
+    res2:"Find therapists who understand your cultural background. Built by and for Asian communities.",
+    res3:"Culturally informed mental health education and peer support for Asian American communities.",
+    res4:"Talk to a trained listener, anonymously and for free. No appointment needed — just a conversation.",
+    res5:"Crisis support for LGBTQ+ young people navigating family and cultural pressures.",
+    res6:"Search therapists with Asian cultural competency by location, language, and insurance coverage.",
+    stepsLabel:"Starting small",
+    stepsTitle:"You do not need to have it all figured out. Start here.",
+    s1h:"Name what you are feeling", s1p:"Simply acknowledging \"I have been struggling\" — even just to yourself — is a real and meaningful first step.",
+    s2h:"Explore anonymously", s2p:"Read something. Try a free resource. Browse. No commitment, no one needs to know.",
+    s3h:"Reach out, in your own time", s3p:"When you are ready, reaching out to a support line is confidential. You decide how much to share.",
+    s4h:"Pass this on", s4p:"If someone you know might be quietly struggling, sharing this page could be the most important thing you do today.",
+    closingLabel:"A final thought",
+    closingTitle:"Caring for yourself is how you care for everyone you love.",
+    closingSub:"If you or someone you know needs to speak to someone right now, please reach out.",
+    crisisLabel:"Call or text, 24/7 — free & confidential",
+    crisisSub:"Suicide & Crisis Lifeline · Mandarin & Cantonese available",
+    footer1:"This page was created to support mental wellbeing in Asian American communities.",
+    footerShare:"Share freely · 자유롭게 공유 · 自由に共有 · Tự do chia sẻ · 自由分享"
+  },
+  zh: {
+    navLogo:"你并不孤单", navCommon:"有多普遍", navCulture:"文化与价值观", navParents:"致父母", navResources:"帮助资源",
+    eyebrow:"心理健康 · 亚裔社区",
+    heroTitle:"你<em>并不孤单</em>。",
+    heroSubtitle:"挣扎并不代表失败。",
+    heroBody:"许多亚裔美国年轻人承受着无形的压力——要出人头地、撑起家庭、永远不能示弱。如果你内心感到沉重，这种感受值得被关注。你值得被支持。",
+    ctaBtn:"了解更多",
+    stat1:"比美国平均水平更少接受心理健康治疗",
+    stat2:"在受儒家文化影响的社会中，患有精神疾病的年轻人未接受治疗",
+    stat3:"有可诊断病情的亚裔美国人寻求帮助，而白人为50%",
+    stat4:"15至24岁亚裔美国人的首要死因是自杀——但大多数人事前未获得任何支持",
+    commonLabel:"你并不特殊",
+    commonTitle:"这比你想象的<em>更普遍</em>。",
+    commonP1:"年轻亚裔美国人的抑郁和焦虑发生率与普通人群相似。区别不在于有多少人挣扎，而在于有多少人敢于求助。",
+    commonP2:"由于文化压力要求表现良好，你周围的大多数人也在默默承受着比外表更多的东西。坐在你旁边的同学、你的同事、你的朋友——从统计上看，他们很多人都承受着同样的重量。",
+    commonP3:"亚裔社区对心理健康的沉默，并不意味着痛苦不存在。这只是意味着它被忽视，得不到治疗。这种沉默是有代价的——你不必成为其中一部分。",
+    sc1:"每年美国成年人中有这一比例经历心理健康问题——跨越所有背景",
+    sc2:"是焦虑和抑郁发生率最高的年龄段——影响所有族裔",
+    sc3:"中国人对心理健康持积极态度——文化污名化是共同的地区现实",
+    sc4:"亚裔美国人相比有相同诊断的白人同龄人更不可能寻求帮助",
+    confLabel:"理解背景",
+    confTitle:"儒家价值观如何塑造了我们<em>寻求帮助</em>的方式。",
+    confP1:"儒家哲学两千多年来塑造了中国、韩国、日本、越南及其海外社区的家庭和社会生活。这些价值观是力量、社区和身份认同的源泉。但应用于心理健康时，它们会制造出难以言说、更难克服的无形障碍。",
+    confP2:"了解这些障碍的来源，是突破它们的第一步——同时不必放弃对你重要的价值观。",
+    cv1name:"孝道", cv1desc:"对父母和祖先深深的尊重与忠诚是核心美德。家族荣誉是集体的——个人行为影响到每个人。", cv1tension:"这可能导致隐藏心理健康问题以避免让家人'蒙羞'，或觉得寻求外部帮助是对家庭忠诚的背叛。",
+    cv2name:"克己", cv2desc:"情绪纪律和内在控制是美德的体现。公开表达痛苦可能被视为缺乏自我修养。", cv2tension:"情绪上的挣扎被解读为个人失败——纪律不足的表现——而非人类和医学的现实。",
+    cv3name:"面子", cv3desc:"个人和家庭的社会地位和声誉非常重要且脆弱。维护面子影响着许多决定。", cv3tension:"心理健康治疗往往被回避，因为它感觉像是承认某事可能损害家庭在社区中的形象。",
+    cv4name:"和谐", cv4desc:"社会和家庭和谐被置于个人表达之上。破坏和平——即使是为了解决真实的痛苦——可能感觉是错误的。", cv4tension:"年轻人可能压制症状以避免破坏家庭动态，特别是当父母可能对心理健康问题持否定态度时。",
+    confNote:"<strong style='color:white;'>这些价值观不是敌人。</strong>孝道、自律和和谐都是真实的美德。目标不是抛弃它们——而是拓展它们所允许的空间。照顾好你的心理健康<em>本身就是</em>孝道的体现：它让你能够更充分地陪伴、更稳定地支持你所爱的人。",
+    feelLabel:"你可能承受的东西",
+    feelTitle:"这些感受是真实的——它们有名字。",
+    feelIntro:"如果这些听起来很熟悉，你没有在想象。你并不孤单。",
+    f1name:"疲惫", f1:"那种睡眠无法修复的疲倦。因为表现得很好而精疲力竭，尽管内心感觉完全不同。",
+    f2name:"孤独", f2:"被人包围，却无法展示内心真正发生的事情。没有安全的地方可以诚实。",
+    f3name:"压力", f3:"家庭期望、学业要求和模范少数民族标准的重压。",
+    f4name:"夹在两个世界之间", f4:"被夹在文化之间——不完全属于任何一个。不确定哪个版本的自己才是真实的。",
+    f5name:"麻木", f5:"感到脱节，走过场。就像内心有什么被关掉了。",
+    f6name:"羞耻", f6:"认为有这种感受意味着你根本上有什么问题。事实并非如此。从来都不是。",
+    reframeLabel:"转换视角",
+    reframeTitle:"让我们保持沉默的想法——以及另一种看待方式。",
+    rOldH:"熟悉的想法", rNewH:"另一种看法",
+    r1o:"「我应该自己处理这件事。寻求帮助是软弱的表现。」",
+    r1n:"寻求支持是一种自律——照顾好自己以便能够完全承担责任的自律。任何文化中最坚强的人都认识到自己的极限。",
+    r2o:"「如果我的家人发现我在接受心理治疗，他们会感到羞耻。」",
+    r2n:"心理健康护理是保密的。你有权私下为自己的健康做出决定。许多人在家人不知情的情况下寻求帮助。",
+    r3o:"「其他人的处境更糟。我没有资格抱怨。」",
+    r3n:"痛苦不是竞争。你的经历本身就是真实和有效的。他人受苦更多并不会使你的痛苦更不值得被关注。",
+    r4o:"「这只是压力。每个人都有这种感觉。它会过去的。」",
+    r4n:"一些压力是正常的。但持续的疲惫或干扰你生活的焦虑是值得倾听的信号——而不是独自硬撑。",
+    parentsLabel:"致父母和监护人",
+    parentsTitle:"你的孩子没有<em>问题</em>。你也没有。",
+    parentsIntro:"如果你的孩子告诉你他们在挣扎——或者你感到有什么不对劲——这可能令人感到恐惧和困惑，尤其是当心理健康在你自己成长过程中从未被公开讨论过时。这一部分是为你准备的。",
+    parentsLetter:"「你培养孩子坚强、努力，为家庭争光。当他们来告诉你他们在挣扎时，这可能感觉像是一种失败——你的或他们的。但两者都不是。这意味着他们足够信任你才来告诉你。那份信任是最重要的事。请不要拒绝它。」",
+    parentsSign:"— 写给每一位想要理解的父母",
+    mythsLabel:"常见观念——以及证据所显示的",
+    mythsTitle:"阻碍理解的刻板印象与偏见",
+    mythTag:"常见观念", truthTag:"我们所了解的",
+    mythTag2:"常见观念", truthTag2:"我们所了解的",
+    mythTag3:"常见观念", truthTag3:"我们所了解的",
+    mythTag4:"常见观念", truthTag4:"我们所了解的",
+    m1m:"「精神疾病是性格软弱或缺乏自律的结果。」",
+    m1t:"心理健康问题是具有生物、环境和社会原因的医学现实——与糖尿病或骨折相同。与性格无关。",
+    m2m:"「亚裔家庭没有这些问题。这是西方的概念。」",
+    m2t:"抑郁和焦虑是全球性状况。东亚和东南亚的年轻人以相似的比例经历心理健康问题——他们只是更不可能接受治疗。",
+    m3m:"「如果他们饮食健康、锻炼身体、专注学习，他们就会没事的。」",
+    m3t:"健康习惯支持身心健康，但不能替代临床抑郁或焦虑的治疗。当一个人在医学上挣扎时，告诉他们'更加努力'可能会加深他们的痛苦。",
+    m4m:"「看心理治疗师意味着整个社区都会知道。这给家庭带来耻辱。」",
+    m4t:"心理健康护理在法律上是保密的。治疗师未经同意不能分享你孩子的信息。寻求帮助是一个私人决定——而且往往能预防更大的危机。",
+    tipsLabel:"如果你的孩子来找你",
+    t1:"倾听，不要急于解决问题。被倾听往往是最有治愈力的事情。",
+    t2:"避免说「你没有什么好悲伤的」或「想想我为你付出了多少」。这些话会让谈话陷入僵局。",
+    t3:"问：「你现在需要我做什么？」让他们引导你。",
+    t4:"支持他们获得专业护理是你作为父母能做的最有爱心的事情之一。",
+    resLabel:"从哪里开始",
+    resTitle:"真正<em>理解</em>你的资源。",
+    resIntro:"你不必明天就找到心理治疗师。从小处开始——阅读、聆听、匿名寻求帮助。每一步都算数。",
+    res1:"拨打或发短信至988。免费、保密。提供普通话和粤语服务。无需保险。",
+    res2:"找理解你文化背景的治疗师。由亚裔社区为亚裔社区打造。",
+    res3:"专为亚裔美国社区提供的文化知情心理健康教育和同伴支持。",
+    res4:"匿名且免费地与受过培训的倾听者交谈。无需预约——只是一次对话。",
+    res5:"为在家庭和文化压力下挣扎的LGBTQ+年轻人提供危机支持。",
+    res6:"按位置、语言和保险范围搜索具有亚裔文化能力的治疗师。",
+    stepsLabel:"从小处开始",
+    stepsTitle:"你不需要弄清楚所有事情。从这里开始。",
+    s1h:"说出你的感受", s1p:"简单地承认「我一直在挣扎」——即使只是对自己——也是真实而有意义的第一步。",
+    s2h:"匿名探索", s2p:"阅读一些东西。尝试免费资源。浏览。没有承诺，没有人需要知道。",
+    s3h:"在你自己的时间里伸出援手", s3p:"当你准备好时，联系支持热线是保密的。你决定分享多少。",
+    s4h:"传递这个信息", s4p:"如果你认识的人可能正在默默挣扎，分享这个页面可能是你今天做的最重要的事情。",
+    closingLabel:"最后一个想法",
+    closingTitle:"照顾好自己，是你爱每一个人的方式。",
+    closingSub:"如果你或你认识的人现在需要与人交谈，请伸出援手。",
+    crisisLabel:"24小时免费保密热线",
+    crisisSub:"危机热线 · 提供普通话和粤语服务",
+    footer1:"此页面旨在支持亚裔美国社区的心理健康。",
+    footerShare:"自由分享 · Share freely · 자유롭게 공유 · 自由に共有 · Tự do chia sẻ"
+  },
+  ko: {
+    navLogo:"당신은 혼자가 아닙니다", navCommon:"얼마나 흔한가", navCulture:"문화와 가치관", navParents:"부모님께", navResources:"도움 자료",
+    eyebrow:"정신 건강 · 아시아계 커뮤니티",
+    heroTitle:"당신은 <em>혼자가 아닙니다</em>.",
+    heroSubtitle:"힘들다고 해서 실패한 것이 아닙니다.",
+    heroBody:"많은 아시아계 미국인 젊은이들은 보이지 않는 무게를 지고 있습니다 — 성취에 대한 압박, 가족을 지탱해야 하는 부담, 절대 약함을 보이지 말아야 한다는 압력. 마음이 무겁다면, 그 감정은 돌봄을 받을 자격이 있습니다. 그리고 당신도 지원을 받을 자격이 있습니다.",
+    ctaBtn:"더 알아보기",
+    stat1:"평균적인 미국인보다 정신 건강 치료를 받을 가능성이 낮음",
+    stat2:"유교의 영향을 받은 사회에서 정신 질환이 있는 젊은이들이 치료를 받지 못함",
+    stat3:"진단 가능한 상태의 아시아계 미국인이 도움을 구하는 비율 (백인 미국인은 50%)",
+    stat4:"15-24세 아시아계 미국인의 사망 원인 1위는 자살 — 대부분은 사전에 지원을 받지 못함",
+    commonLabel:"당신은 특별한 경우가 아닙니다",
+    commonTitle:"이것은 당신이 생각하는 것보다 훨씬 <em>흔한</em> 일입니다.",
+    commonP1:"젊은 아시아계 미국인의 우울증과 불안은 일반 인구와 비슷한 비율로 발생합니다. 차이는 얼마나 많은 사람이 힘들어하는가가 아니라, 얼마나 많은 사람이 도움을 요청할 수 있다고 느끼는가에 있습니다.",
+    commonP2:"잘 지내는 것처럼 보여야 한다는 문화적 압력 때문에, 당신 주변의 대부분의 사람들도 겉으로 보이는 것보다 더 많은 것을 조용히 감당하고 있습니다. 수업에서 당신 옆에 앉은 사람, 동료, 친구 — 통계적으로 그들 중 많은 사람들이 같은 무게를 지고 있습니다.",
+    commonP3:"아시아계 커뮤니티에서 정신건강에 관한 침묵은 고통이 없다는 것을 의미하지 않습니다. 보이지 않고, 치료받지 못한다는 뜻입니다. 그 침묵에는 대가가 있습니다 — 당신은 그 일부가 될 필요가 없습니다.",
+    sc1:"매년 미국 성인들이 정신 건강 문제를 경험함 — 모든 배경에 걸쳐",
+    sc2:"불안과 우울증 발생률이 가장 높은 연령대 — 모든 민족에 영향",
+    sc3:"중국인이 정신 건강을 긍정적으로 보는 비율 — 문화적 낙인은 공유된 지역적 현실",
+    sc4:"아시아계 미국인은 같은 진단을 받은 백인 동료들에 비해 도움을 구할 가능성이 두 배 낮음",
+    confLabel:"맥락 이해하기",
+    confTitle:"유교적 가치관이 <em>도움을 구하는</em> 방식을 어떻게 형성하는가.",
+    confP1:"유교 철학은 2000년 이상 중국, 한국, 일본, 베트남과 그 디아스포라 커뮤니티의 가족 및 사회 생활을 형성해왔습니다. 이러한 가치관은 힘, 공동체, 정체성의 원천입니다. 하지만 정신 건강에 적용될 때, 이름 붙이기 어렵고 극복하기는 더 어려운 보이지 않는 장벽을 만들 수 있습니다.",
+    confP2:"이러한 장벽이 어디서 비롯되는지 이해하는 것이 당신에게 중요한 가치관을 포기하지 않으면서도 그것을 넘어서는 첫 번째 단계입니다.",
+    cv1name:"효도", cv1desc:"부모와 조상에 대한 깊은 존경과 충성은 핵심 덕목입니다. 가족의 명예는 집단적입니다 — 개인의 행동이 모든 사람에게 영향을 미칩니다.", cv1tension:"이는 가족을 '수치스럽게' 하지 않으려고 정신 건강 문제를 숨기거나, 외부의 도움을 구하는 것이 가족 충성심에 대한 배신처럼 느껴지게 할 수 있습니다.",
+    cv2name:"극기 (자기 절제)", cv2desc:"감정적 규율과 내적 통제는 덕의 표시입니다. 고통을 공개적으로 표현하는 것은 자기 수양의 부족으로 여겨질 수 있습니다.", cv2tension:"감정적으로 힘든 것이 인간적이고 의학적인 현실이 아니라 개인적 실패 — 규율 부족의 표시 — 로 해석됩니다.",
+    cv3name:"체면 (面子)", cv3desc:"개인과 가족 모두에게 사회적 지위와 명성은 중요합니다. 체면 유지가 많은 결정을 형성합니다.", cv3tension:"정신 건강 치료는 커뮤니티에서 가족의 이미지를 손상시킬 수 있는 무언가를 인정하는 것처럼 느껴지기 때문에 회피됩니다.",
+    cv4name:"화목 (조화)", cv4desc:"사회적, 가족적 조화가 개인 표현보다 중요하게 여겨집니다. 실제 고통을 해결하기 위해서라도 평화를 깨는 것이 잘못된 것처럼 느껴질 수 있습니다.", cv4tension:"젊은이들은 가족 역학을 방해하지 않기 위해 증상을 억누를 수 있으며, 특히 부모가 정신 건강 문제에 대해 부정적일 수 있을 때 그렇습니다.",
+    confNote:"<strong style='color:white;'>이 가치관들은 적이 아닙니다.</strong> 효도, 자제, 화합은 진정한 덕목입니다. 목표는 그것들을 버리는 것이 아니라 — 그것들이 허용하는 것을 확장하는 것입니다. 정신 건강을 돌보는 것<em>이 바로</em> 효도의 표현입니다: 그것은 당신이 더 현재에 존재하고, 더 안정적이며, 사랑하는 사람들을 위해 더 잘 나타날 수 있게 합니다.",
+    feelLabel:"당신이 짊어지고 있을 수 있는 것",
+    feelTitle:"이러한 감정들은 실재합니다 — 그리고 이름이 있습니다.",
+    feelIntro:"이 중 익숙한 것이 있다면, 당신이 상상하는 것이 아닙니다. 그리고 당신은 혼자가 아닙니다.",
+    f1name:"탈진", f1:"수면으로도 해결되지 않는 피로. 아무것도 아닌 것처럼 느끼면서 건강한 척하느라 지쳐있음.",
+    f2name:"외로움", f2:"사람들에 둘러싸여 있지만, 내면에서 실제로 일어나고 있는 것을 보여줄 수 없음. 솔직할 안전한 장소가 없음.",
+    f3name:"압박감", f3:"가족의 기대, 학업 요구, 모범 소수 집단 기준의 무게.",
+    f4name:"두 세계 사이", f4:"문화 사이에 끼어 — 어느 쪽에도 완전히 속하지 못함. 어떤 버전의 자신이 진짜인지 불확실.",
+    f5name:"무감각", f5:"연결이 끊어진 느낌, 형식적으로만 살아가는 느낌. 내면에서 무언가 꺼진 것 같은.",
+    f6name:"수치심", f6:"이렇게 느끼는 것이 근본적으로 당신에게 문제가 있다는 것을 의미한다는 믿음. 그렇지 않습니다. 그런 적이 없었습니다.",
+    reframeLabel:"렌즈 바꾸기",
+    reframeTitle:"우리를 침묵하게 만드는 생각들 — 그리고 그것들을 보는 또 다른 방법.",
+    rOldH:"익숙한 생각", rNewH:"또 다른 시각",
+    r1o:"「이걸 혼자서 처리해야 한다. 도움을 구하는 것은 나약함이다.」",
+    r1n:"지원을 구하는 것은 자율 — 책임을 완전히 수행할 수 있도록 자신을 돌보는 자율입니다. 어떤 문화에서든 가장 강한 사람들은 자신의 한계를 인식합니다.",
+    r2o:"「가족이 내가 치료를 받고 있다는 것을 알면 수치스러워할 것이다.」",
+    r2n:"정신 건강 치료는 기밀입니다. 당신은 자신의 건강에 대해 개인적으로 결정할 권리가 있습니다. 많은 사람들이 가족 중 누구도 모르는 상태에서 도움을 구합니다.",
+    r3o:"「다른 사람들의 처지가 더 나쁘다. 나는 불평할 자격이 없다.」",
+    r3n:"고통은 경쟁이 아닙니다. 당신의 경험은 그 자체로 진실되고 유효합니다. 다른 사람들이 더 많이 고통받는다고 해서 당신의 고통이 덜 돌봄을 받을 자격이 있는 것은 아닙니다.",
+    r4o:"「이건 그냥 스트레스다. 다들 이렇게 느낀다. 지나갈 것이다.」",
+    r4n:"어느 정도의 스트레스는 정상입니다. 그러나 삶을 방해하는 지속적인 탈진이나 불안은 혼자 버티는 것이 아니라 경청할 가치가 있는 신호입니다.",
+    parentsLabel:"부모님 및 보호자께",
+    parentsTitle:"자녀는 <em>망가지지 않았습니다</em>. 당신도 마찬가지입니다.",
+    parentsIntro:"자녀가 힘들다고 말했거나 무언가 잘못되었다는 것을 느꼈다면, 특히 정신 건강이 자신의 성장 과정에서 공개적으로 논의된 적이 없다면 두렵고 혼란스러울 수 있습니다. 이 섹션은 당신을 위한 것입니다.",
+    parentsLetter:"「당신은 자녀를 강하게, 열심히 일하도록, 가족을 자랑스럽게 만들도록 키웠습니다. 그들이 와서 힘들다고 말할 때, 실패처럼 느껴질 수 있습니다 — 당신의 것이든 그들의 것이든. 하지만 둘 다 아닙니다. 그것은 그들이 당신에게 말할 만큼 충분히 신뢰한다는 것을 의미합니다. 그 신뢰가 가장 중요한 것입니다. 제발 외면하지 마세요.」",
+    parentsSign:"— 이해하려는 모든 부모에게 전하는 메시지",
+    mythsLabel:"일반적인 믿음 — 그리고 증거가 보여주는 것",
+    mythsTitle:"이해를 방해하는 고정관념과 오명",
+    mythTag:"일반적 믿음", truthTag:"우리가 아는 것",
+    mythTag2:"일반적 믿음", truthTag2:"우리가 아는 것",
+    mythTag3:"일반적 믿음", truthTag3:"우리가 아는 것",
+    mythTag4:"일반적 믿음", truthTag4:"우리가 아는 것",
+    m1m:"「정신 질환은 나약한 성격이나 자기 절제 부족의 결과이다.」",
+    m1t:"정신 건강 상태는 생물학적, 환경적, 사회적 원인이 있는 의학적 현실입니다 — 당뇨병이나 골절과 같습니다. 성격과는 아무런 관계가 없습니다.",
+    m2m:"「아시아계 가정은 이런 문제가 없다. 이것은 서양 개념이다.」",
+    m2t:"우울증과 불안은 전 세계적인 상태입니다. 동아시아와 동남아시아의 젊은이들은 비슷한 비율로 정신 건강 문제를 경험합니다 — 단지 치료를 받을 가능성이 훨씬 낮을 뿐입니다.",
+    m3m:"「그들이 잘 먹고, 운동하고, 공부에 집중하면 괜찮아질 것이다.」",
+    m3t:"건강한 습관은 웰빙을 지원하지만 임상 우울증이나 불안 치료를 대체할 수 없습니다. 의학적으로 힘든 사람에게 '더 열심히 하라'고 말하는 것은 고통을 깊게 할 수 있습니다.",
+    m4m:"「치료사를 만나면 온 커뮤니티가 알게 된다. 가족에게 수치를 가져다 준다.」",
+    m4t:"정신 건강 치료는 법적으로 기밀입니다. 치료사는 동의 없이 자녀의 정보를 공유할 수 없습니다. 도움을 구하는 것은 개인적인 결정입니다 — 그리고 종종 훨씬 더 큰 위기를 예방합니다.",
+    tipsLabel:"자녀가 당신에게 올 때",
+    t1:"즉시 해결하려 하지 않고 듣기. 들어주는 것이 종종 가장 치유적인 것입니다.",
+    t2:"「슬퍼할 것도 없잖아」나 「내가 얼마나 열심히 일했는지 생각해봐」같은 말은 피하세요. 이런 말들은 대화를 차단합니다.",
+    t3:"「지금 나에게서 무엇이 필요하니?」라고 물어보세요. 그들이 안내하게 하세요.",
+    t4:"전문 치료를 받을 수 있도록 지원하는 것은 부모로서 할 수 있는 가장 사랑스러운 일 중 하나입니다.",
+    resLabel:"어디서 시작할까요",
+    resTitle:"당신을 <em>이해하는</em> 자원들.",
+    resIntro:"내일 당장 치료사를 찾을 필요는 없습니다. 작게 시작하세요 — 읽고, 듣고, 익명으로 연락해보세요. 모든 단계가 중요합니다.",
+    res1:"988에 전화하거나 문자를 보내세요. 무료, 기밀. 표준어와 광동어로 이용 가능. 보험 불필요.",
+    res2:"당신의 문화적 배경을 이해하는 치료사를 찾으세요. 아시아 커뮤니티를 위해 아시아 커뮤니티가 만들었습니다.",
+    res3:"아시아계 미국인 커뮤니티를 위한 문화적으로 정보에 입각한 정신 건강 교육 및 동료 지원.",
+    res4:"익명으로 무료로 훈련된 청취자와 이야기하세요. 예약 불필요 — 그냥 대화입니다.",
+    res5:"가족과 문화적 압력을 탐색하는 LGBTQ+ 젊은이들을 위한 위기 지원.",
+    res6:"위치, 언어, 보험 범위별로 아시아 문화 역량을 갖춘 치료사를 검색하세요.",
+    stepsLabel:"작게 시작하기",
+    stepsTitle:"모든 것을 파악할 필요는 없습니다. 여기서 시작하세요.",
+    s1h:"느끼는 것을 명명하기", s1p:"「나는 힘들었다」고 인정하는 것만으로도 — 자신에게만이라도 — 진실하고 의미 있는 첫 번째 단계입니다.",
+    s2h:"익명으로 탐색하기", s2p:"무언가를 읽어보세요. 무료 자원을 시도해보세요. 둘러보세요. 약속 없이, 아무도 알 필요 없습니다.",
+    s3h:"자신의 시간에 연락하기", s3p:"준비가 되면, 지원 라인에 연락하는 것은 기밀입니다. 얼마나 공유할지는 당신이 결정합니다.",
+    s4h:"전달하기", s4p:"조용히 힘들어하는 사람을 알고 있다면, 이 페이지를 공유하는 것이 오늘 당신이 할 수 있는 가장 중요한 일일 수 있습니다.",
+    closingLabel:"마지막 생각",
+    closingTitle:"자신을 돌보는 것이 사랑하는 모든 사람을 돌보는 방법입니다.",
+    closingSub:"당신이나 당신이 아는 누군가가 지금 당장 누군가와 이야기해야 한다면, 연락해 주세요.",
+    crisisLabel:"24시간, 무료, 비밀 보장",
+    crisisSub:"자살 및 위기 상담 전화 · 한국어 서비스 이용 가능",
+    footer1:"이 페이지는 아시아계 미국인 커뮤니티의 정신 건강을 지원하기 위해 만들어졌습니다.",
+    footerShare:"자유롭게 공유하세요 · Share freely · 自由に共有 · Tự do chia sẻ · 自由分享"
+  },
+  ja: {
+    navLogo:"あなたは一人ではありません", navCommon:"どれほど一般的か", navCulture:"文化と価値観", navParents:"保護者の方へ", navResources:"支援リソース",
+    eyebrow:"メンタルヘルス · アジア系コミュニティ",
+    heroTitle:"あなたは<em>一人ではありません</em>。",
+    heroSubtitle:"苦しんでいることは、失敗を意味しません。",
+    heroBody:"多くのアジア系アメリカ人の若者は、見えない重さを抱えています — 成功へのプレッシャー、家族を支える責任、弱さを見せてはいけないという思い。もし心が重いなら、その感情はケアを受ける価値があります。そして、あなたはサポートを受ける資格があります。",
+    ctaBtn:"詳しく見る",
+    stat1:"平均的なアメリカ人よりもメンタルヘルス治療を受ける可能性が低い",
+    stat2:"儒教の影響を受けた社会で精神疾患を持つ若者が治療を受けていない",
+    stat3:"診断可能な状態のアジア系アメリカ人がケアを求める割合（白人アメリカ人は50%）",
+    stat4:"15〜24歳のアジア系アメリカ人の死因第1位は自殺 — しかしほとんどは事前にサポートを受けていない",
+    commonLabel:"あなただけではありません",
+    commonTitle:"これはあなたが思うより<em>ずっと一般的</em>なことです。",
+    commonP1:"アジア系アメリカ人の若者のうつ病と不安は、一般人口と同様の割合で発生します。違いは、何人が苦しんでいるかではなく、何人が助けを求められると感じているかです。",
+    commonP2:"良く見えなければならないという文化的プレッシャーのため、あなたの周りの多くの人も、表に出す以上のことを静かに抱えています。授業で隣に座っている人、同僚、友人 — 統計的に、彼らの多くが同じ重さを抱えています。",
+    commonP3:"アジア系コミュニティにおけるメンタルヘルスに関する沈黙は、痛みがないことを意味しません。見えず、治療されていないということです。その沈黙にはコストがあります — あなたはその一部である必要はありません。",
+    sc1:"毎年、米国の成人がメンタルヘルスの問題を経験 — あらゆる背景にわたって",
+    sc2:"不安とうつ病の発生率が最も高い年齢層 — すべての民族に影響",
+    sc3:"中国でメンタルヘルスをポジティブに見る人の割合 — 文化的スティグマは共有された地域的現実",
+    sc4:"アジア系アメリカ人は同じ診断を受けた白人の同僚と比べて助けを求める可能性が2倍低い",
+    confLabel:"背景を理解する",
+    confTitle:"儒教の価値観が<em>助けを求める</em>関係をどのように形成するか。",
+    confP1:"儒教哲学は、2000年以上にわたって中国、韓国、日本、ベトナム、そしてそのディアスポラコミュニティの家族および社会生活を形成してきました。これらの価値観は、強さ、コミュニティ、アイデンティティの源です。しかし、メンタルヘルスに適用されると、名前をつけることが難しく、克服することはさらに難しい見えない障壁を作り出すことがあります。",
+    confP2:"これらの障壁がどこから来るのかを理解することが、あなたにとって大切な価値観を捨てることなく、それらを乗り越えるための第一歩です。",
+    cv1name:"孝行", cv1desc:"親や先祖への深い尊敬と忠誠は核心的な美徳です。家族の名誉は集団的 — 個人の行動は全員に影響します。", cv1tension:"これは、家族を「恥じさせる」ことを避けるために問題を隠したり、外部からの助けを求めることが家族への忠誠の裏切りのように感じられることにつながります。",
+    cv2name:"克己 (自制心)", cv2desc:"感情的な規律と内なるコントロールは美徳の表れです。苦しみを公に表現することは自己修養の欠如と見られることがあります。", cv2tension:"感情的に苦しむことは、人間的かつ医学的な現実ではなく、個人の失敗 — 規律の欠如の表れ — として描写されます。",
+    cv3name:"面子 (メンツ)", cv3desc:"個人と家族の社会的地位と評判は非常に重要です。面子を保つことが多くの決断を形成します。", cv3tension:"精神保健治療は、コミュニティにおける家族のイメージを損なう可能性のある何かを認めることのように感じられるため、避けられます。",
+    cv4name:"和 (調和)", cv4desc:"社会的・家族的調和は個人の表現よりも重視されます。実際の苦しみを解決するためであっても、平和を乱すことは間違いのように感じられます。", cv4tension:"若者は、特に親がメンタルヘルスの問題に否定的かもしれない場合、家族のダイナミクスを乱さないように症状を抑制することがあります。",
+    confNote:"<strong style='color:white;'>これらの価値観は敵ではありません。</strong>孝行、自制、調和は真の美徳です。目標はそれらを捨てることではなく — それらが許すことを広げることです。メンタルヘルスを大切にすること<em>は</em>孝行の表れです：あなたがより現在にいられ、より安定し、愛する人々のためにより充実して存在できるようになります。",
+    feelLabel:"あなたが抱えているかもしれないもの",
+    feelTitle:"これらの感情は現実です — そして名前があります。",
+    feelIntro:"これらのどれかが馴染み深く聞こえるなら、想像しているのではありません。あなたは一人ではありません。",
+    f1name:"疲労感", f1:"睡眠では癒えない疲れ。実際は全くそう感じていないのに元気なふりをすることで疲弊している。",
+    f2name:"孤独感", f2:"人に囲まれているのに、内側で本当に起きていることを見せられない。正直になれる安全な場所がない。",
+    f3name:"プレッシャー", f3:"家族の期待、学業の要求、モデルマイノリティの基準の重さ。",
+    f4name:"二つの世界の間で", f4:"文化の間に挟まれて — どちらにも完全に属していない。どのバージョンの自分が本物かわからない。",
+    f5name:"無感覚", f5:"つながりが切れた感じ、形式的にこなしている感じ。内側で何かが切れたような。",
+    f6name:"恥", f6:"こう感じることは根本的に何か問題があることを意味するという信念。そうではありません。決してそうではありませんでした。",
+    reframeLabel:"視点を変える",
+    reframeTitle:"私たちを沈黙させる思考 — そしてそれを別の視点で捉える方法。",
+    rOldH:"おなじみの考え", rNewH:"別の見方",
+    r1o:"「これは自分で対処すべきだ。助けを求めることは弱さだ。」",
+    r1n:"サポートを求めることは自律 — 責任を完全に担えるよう自分を大切にする自律です。どんな文化でも最も強い人々は自分の限界を認識しています。",
+    r2o:"「家族が私が治療を受けていることを知ったら、恥をかかせることになる。」",
+    r2n:"メンタルヘルスケアは機密です。自分の健康について個人的に決定する権利があります。家族の誰も知らずに助けを求める人が多くいます。",
+    r3o:"「他の人はもっと大変な状況にある。私には不満を言う資格がない。」",
+    r3n:"苦しみは競争ではありません。あなたの経験はそれ自体で真実で有効です。他の人がより多く苦しんでいることは、あなたの苦しみがケアを受ける資格が少ないことを意味しません。",
+    r4o:"「これはただのストレスだ。みんなこう感じる。やがて過ぎ去る。」",
+    r4n:"ある程度のストレスは普通です。しかし、生活を妨げる持続的な疲労や不安は、一人で乗り越えるのではなく、耳を傾ける価値のあるシグナルです。",
+    parentsLabel:"保護者の方へ",
+    parentsTitle:"お子さんは<em>壊れていません</em>。あなたも同様です。",
+    parentsIntro:"お子さんが苦しんでいると打ち明けてくれた場合、またはおかしいと感じた場合、特にメンタルヘルスがご自身の成長過程で公開的に話し合われたことがなければ、恐ろしく混乱することがあります。このセクションはあなたのためのものです。",
+    parentsLetter:"「あなたはお子さんを強く、懸命に働き、家族を誇りにするように育てました。苦しんでいると打ち明けてきたとき、失敗のように感じるかもしれません — あなたのものでも彼らのものでも。しかし、どちらでもありません。それは、あなたに話すほど信頼しているということです。その信頼が最も大切なことです。どうかそれを拒否しないでください。」",
+    parentsSign:"— 理解しようとするすべての親へのメッセージ",
+    mythsLabel:"一般的な信念 — そして証拠が示すこと",
+    mythsTitle:"理解を妨げるステレオタイプと偏見",
+    mythTag:"一般的な信念", truthTag:"私たちが知っていること",
+    mythTag2:"一般的な信念", truthTag2:"私たちが知っていること",
+    mythTag3:"一般的な信念", truthTag3:"私たちが知っていること",
+    mythTag4:"一般的な信念", truthTag4:"私たちが知っていること",
+    m1m:"「精神疾患は弱い性格や自己規律の欠如の結果だ。」",
+    m1t:"メンタルヘルスの状態は、糖尿病や骨折と同じく、生物学的、環境的、社会的原因がある医学的現実です。性格とは何も関係ありません。",
+    m2m:"「アジア系の家族にはこのような問題はない。これは西洋の概念だ。」",
+    m2t:"うつ病と不安は世界的な状態です。東アジアと東南アジアの若者は同様の割合でメンタルヘルスの問題を経験しています — ただ治療を受ける可能性がはるかに低いだけです。",
+    m3m:"「よく食べて、運動して、勉強に集中すれば大丈夫になる。」",
+    m3t:"健康的な習慣はウェルビーイングをサポートしますが、臨床的なうつ病や不安の治療に取って代わることはできません。医学的に苦しんでいる人に「もっと頑張れ」と言うことは、苦しみを深める可能性があります。",
+    m4m:"「セラピストを見ることは、コミュニティ全体が知ることになる。家族に恥をもたらす。」",
+    m4t:"メンタルヘルスケアは法的に機密です。セラピストは同意なしにお子さんの情報を共有することができません。助けを求めることは個人的な決断です — そして多くの場合、後でより大きな危機を防ぎます。",
+    tipsLabel:"お子さんが相談に来たとき",
+    t1:"すぐに解決しようとせずに聞く。聞いてもらうことが最も癒しになることが多いです。",
+    t2:"「悲しむことなんて何もない」や「私がどれだけ頑張ったか考えて」などの言葉は避けてください。これらは会話を閉じてしまいます。",
+    t3:"「今、私に何が必要？」と聞いてください。彼らに導かせてください。",
+    t4:"専門的なケアへのアクセスをサポートすることは、親としてできる最も愛情深いことの一つです。",
+    resLabel:"どこから始めればいいか",
+    resTitle:"あなたを<em>理解する</em>リソース。",
+    resIntro:"明日すぐにセラピストを見つける必要はありません。小さく始めてください — 読んで、聞いて、匿名で連絡を取ってみてください。すべてのステップが重要です。",
+    res1:"988に電話またはテキスト。無料、機密。標準語と広東語で利用可能。保険不要。",
+    res2:"あなたの文化的背景を理解するセラピストを見つけてください。アジア系コミュニティのためにアジア系コミュニティが作りました。",
+    res3:"アジア系アメリカ人コミュニティのための文化的に情報に基づいたメンタルヘルス教育とピアサポート。",
+    res4:"匿名で無料で訓練されたリスナーと話してください。予約不要 — ただの会話です。",
+    res5:"家族や文化的プレッシャーに対応するLGBTQ+の若者への危機サポート。",
+    res6:"場所、言語、保険の対象によるアジア文化的能力を持つセラピストを検索してください。",
+    stepsLabel:"小さく始める",
+    stepsTitle:"すべてを把握する必要はありません。ここから始めてください。",
+    s1h:"感じていることを名付ける", s1p:"「私は苦しんでいた」と認めるだけで — 自分自身にだけでも — 真実で意味のある第一歩です。",
+    s2h:"匿名で探索する", s2p:"何かを読んでください。無料のリソースを試してください。閲覧してください。コミットメントなし、誰も知る必要はありません。",
+    s3h:"自分のペースで連絡する", s3p:"準備ができたら、サポートラインに連絡することは機密です。どれだけ共有するかはあなたが決めます。",
+    s4h:"伝える", s4p:"静かに苦しんでいる人を知っているなら、このページを共有することが今日あなたがすることで最も重要なことかもしれません。",
+    closingLabel:"最後に",
+    closingTitle:"自分を大切にすることは、愛する人を大切にすることです。",
+    closingSub:"あなたや知人が今すぐ誰かと話す必要がある場合は、連絡してください。",
+    crisisLabel:"24時間、無料、秘密厳守",
+    crisisSub:"自殺・危機ライン · 日本語対応可能",
+    footer1:"このページはアジア系アメリカ人コミュニティのメンタルウェルビーイングを支援するために作られました。",
+    footerShare:"自由に共有 · Share freely · 자유롭게 공유 · Tự do chia sẻ · 自由分享"
+  },
+  vi: {
+    navLogo:"Bạn không đơn độc", navCommon:"Mức độ phổ biến", navCulture:"Văn hóa & Giá trị", navParents:"Dành cho cha mẹ", navResources:"Tài nguyên",
+    eyebrow:"Sức khỏe tâm thần · Cộng đồng Châu Á",
+    heroTitle:"Bạn <em>không đơn độc</em>.",
+    heroSubtitle:"Đang vật lộn không có nghĩa là bạn đã thất bại.",
+    heroBody:"Nhiều người trẻ gốc Á mang gánh nặng vô hình — áp lực thành công, gánh vác gia đình, không bao giờ được yếu đuối. Nếu trong lòng bạn đang nặng nề, cảm xúc đó xứng đáng được quan tâm. Và bạn xứng đáng được hỗ trợ.",
+    ctaBtn:"Tìm hiểu thêm",
+    stat1:"ít có khả năng nhận được điều trị sức khỏe tâm thần hơn người Mỹ trung bình",
+    stat2:"người trẻ mắc bệnh tâm thần trong các xã hội chịu ảnh hưởng Nho giáo không được điều trị",
+    stat3:"người Mỹ gốc Á có tình trạng có thể chẩn đoán tìm kiếm sự chăm sóc, so với 50% người Mỹ da trắng",
+    stat4:"nguyên nhân tử vong số 1 của người Mỹ gốc Á từ 15-24 tuổi là tự tử — nhưng hầu hết không nhận được hỗ trợ trước đó",
+    commonLabel:"Bạn không phải trường hợp ngoại lệ",
+    commonTitle:"Điều này <em>phổ biến</em> hơn bạn nghĩ nhiều.",
+    commonP1:"Trầm cảm và lo âu ở người trẻ gốc Á xảy ra ở tỷ lệ tương tự như dân số chung. Sự khác biệt không phải ở chỗ có bao nhiêu người đang vật lộn — mà là bao nhiêu người cảm thấy có thể cầu xin giúp đỡ.",
+    commonP2:"Do áp lực văn hóa phải trông có vẻ ổn, hầu hết mọi người xung quanh bạn cũng đang âm thầm chịu đựng nhiều hơn những gì họ bộc lộ. Người ngồi cạnh bạn trong lớp, đồng nghiệp, bạn bè — về mặt thống kê, nhiều người trong số họ đang mang cùng một gánh nặng.",
+    commonP3:"Sự im lặng về sức khỏe tâm thần trong các cộng đồng Châu Á không có nghĩa là nỗi đau không tồn tại. Nó có nghĩa là nó không được nhìn thấy và không được điều trị. Sự im lặng đó có cái giá của nó — và bạn không cần phải là một phần của nó.",
+    sc1:"người lớn ở Mỹ trải qua tình trạng sức khỏe tâm thần mỗi năm — trên mọi xuất thân",
+    sc2:"là nhóm tuổi có tỷ lệ lo âu và trầm cảm cao nhất — ảnh hưởng đến tất cả các dân tộc",
+    sc3:"người ở Trung Quốc nhìn nhận tích cực về sức khỏe tâm thần — kỳ thị văn hóa là thực tế khu vực chung",
+    sc4:"người Mỹ gốc Á ít có khả năng tìm kiếm sự giúp đỡ gấp đôi so với bạn bè da trắng có cùng chẩn đoán",
+    confLabel:"Hiểu bối cảnh",
+    confTitle:"Các giá trị Nho giáo định hình cách chúng ta <em>cầu xin giúp đỡ</em> như thế nào.",
+    confP1:"Triết học Nho giáo đã định hình cuộc sống gia đình và xã hội ở Trung Quốc, Hàn Quốc, Nhật Bản, Việt Nam và các cộng đồng hải ngoại của họ trong hơn hai nghìn năm. Những giá trị này là nguồn sức mạnh, cộng đồng và bản sắc. Nhưng khi áp dụng vào sức khỏe tâm thần, chúng có thể tạo ra những rào cản vô hình khó đặt tên — và còn khó vượt qua hơn.",
+    confP2:"Hiểu những rào cản này đến từ đâu là bước đầu tiên để vượt qua chúng — mà không từ bỏ những giá trị quan trọng với bạn.",
+    cv1name:"Hiếu thảo", cv1desc:"Sự tôn trọng và lòng trung thành sâu sắc với cha mẹ và tổ tiên là đức tính cốt lõi. Danh dự gia đình mang tính tập thể — hành động cá nhân phản ánh lên tất cả mọi người.", cv1tension:"Điều này có thể dẫn đến việc che giấu những vật lộn để tránh 'làm nhục' gia đình, hoặc cảm thấy rằng việc tìm kiếm sự giúp đỡ từ bên ngoài là sự phản bội lòng trung thành.",
+    cv2name:"Tự kiềm chế", cv2desc:"Kỷ luật cảm xúc và kiểm soát nội tâm là dấu hiệu của đức hạnh. Bày tỏ đau khổ công khai có thể bị coi là thiếu tự chủ.", cv2tension:"Vật lộn về cảm xúc được định khung như là thất bại cá nhân — dấu hiệu thiếu kỷ luật — thay vì là thực tế con người và y tế.",
+    cv3name:"Thể diện (面子)", cv3desc:"Địa vị xã hội và danh tiếng — cho cả cá nhân và gia đình — rất quan trọng và mong manh. Duy trì thể diện định hình nhiều quyết định.", cv3tension:"Điều trị sức khỏe tâm thần thường bị tránh né vì nó cảm thấy như là thừa nhận điều gì đó có thể làm tổn hại hình ảnh gia đình trong cộng đồng.",
+    cv4name:"Hòa thuận", cv4desc:"Sự hòa hợp xã hội và gia đình được đánh giá cao hơn sự biểu đạt cá nhân. Phá vỡ hòa bình — ngay cả để giải quyết đau khổ thực sự — có thể cảm thấy sai.", cv4tension:"Người trẻ có thể kìm nén các triệu chứng để tránh làm gián đoạn động lực gia đình, đặc biệt nếu cha mẹ có thể phản đối các mối quan tâm về sức khỏe tâm thần.",
+    confNote:"<strong style='color:white;'>Những giá trị này không phải kẻ thù.</strong> Hiếu thảo, tự chủ và hòa thuận là những đức tính chân thật. Mục tiêu không phải từ bỏ chúng — mà là mở rộng những gì chúng cho phép. Chăm sóc sức khỏe tâm thần của bạn <em>chính là</em> biểu hiện của lòng hiếu thảo: nó cho phép bạn hiện diện hơn, ổn định hơn và có khả năng hơn để chăm sóc những người bạn yêu thương.",
+    feelLabel:"Những gì bạn có thể đang mang",
+    feelTitle:"Những cảm xúc này là có thật — và chúng có tên gọi.",
+    feelIntro:"Nếu bất kỳ điều nào trong số này nghe quen thuộc, bạn không phải đang tưởng tượng. Và bạn không đơn độc.",
+    f1name:"Kiệt sức", f1:"Mệt mỏi theo cách mà giấc ngủ không thể chữa lành. Kiệt sức vì phải giả vờ ổn trong khi thực ra không phải vậy.",
+    f2name:"Cô đơn", f2:"Bị bao quanh bởi mọi người, nhưng không thể cho thấy những gì thực sự đang xảy ra bên trong. Không có nơi an toàn để thành thật.",
+    f3name:"Áp lực", f3:"Gánh nặng của kỳ vọng gia đình, yêu cầu học tập và tiêu chuẩn thiểu số mẫu mực.",
+    f4name:"Giữa hai thế giới", f4:"Bị kẹp giữa các nền văn hóa — không hoàn toàn thuộc về cái nào. Không chắc phiên bản nào của bản thân mình là thật.",
+    f5name:"Tê liệt", f5:"Cảm thấy mất kết nối, chỉ đi qua các động tác. Như thể có gì đó bị tắt bên trong.",
+    f6name:"Xấu hổ", f6:"Niềm tin rằng cảm thấy như vậy có nghĩa là có gì đó về cơ bản sai với bạn. Không phải vậy. Chưa bao giờ như vậy.",
+    reframeLabel:"Thay đổi góc nhìn",
+    reframeTitle:"Những suy nghĩ khiến chúng ta im lặng — và một cách khác để nhìn nhận chúng.",
+    rOldH:"Suy nghĩ quen thuộc", rNewH:"Một cách nhìn khác",
+    r1o:"\"Tôi nên tự mình xử lý điều này. Cầu xin giúp đỡ là yếu đuối.\"",
+    r1n:"Tìm kiếm sự hỗ trợ là kỷ luật — kỷ luật để chăm sóc bản thân để bạn có thể gánh vác trách nhiệm đầy đủ. Những người mạnh nhất nhận ra giới hạn của họ.",
+    r2o:"\"Nếu gia đình biết tôi đang trị liệu, họ sẽ cảm thấy xấu hổ.\"",
+    r2n:"Chăm sóc sức khỏe tâm thần là bảo mật. Bạn có quyền đưa ra quyết định về sức khỏe của mình một cách riêng tư. Nhiều người tìm kiếm sự giúp đỡ mà không ai trong gia đình biết.",
+    r3o:"\"Người khác còn khó khăn hơn. Tôi không có quyền phàn nàn.\"",
+    r3n:"Đau khổ không phải là cuộc thi. Trải nghiệm của bạn là thật và có giá trị theo đúng nghĩa của nó. Người khác đau khổ hơn không có nghĩa là của bạn ít xứng đáng được chăm sóc hơn.",
+    r4o:"\"Đây chỉ là căng thẳng. Ai cũng cảm thấy như vậy. Nó sẽ qua đi.\"",
+    r4n:"Một số căng thẳng là bình thường. Nhưng sự kiệt sức dai dẳng hoặc lo lắng làm gián đoạn cuộc sống của bạn là một tín hiệu đáng lắng nghe — không phải một mình vượt qua.",
+    parentsLabel:"Dành cho cha mẹ và người giám hộ",
+    parentsTitle:"Con bạn không <em>hư hỏng</em>. Và bạn cũng không.",
+    parentsIntro:"Nếu con bạn đã nói với bạn rằng chúng đang vật lộn — hoặc nếu bạn cảm thấy có gì đó không ổn — điều đó có thể gây ra sợ hãi và nhầm lẫn, đặc biệt nếu sức khỏe tâm thần chưa bao giờ được thảo luận cởi mở trong thời thơ ấu của chính bạn. Phần này dành cho bạn.",
+    parentsLetter:"\"Bạn đã nuôi dạy con cái mạnh mẽ. Chăm chỉ. Để làm cho gia đình tự hào. Khi chúng đến gặp bạn và nói rằng chúng đang vật lộn, điều đó có thể cảm thấy như thất bại — của bạn hoặc của chúng. Nhưng không phải vậy. Điều đó có nghĩa là chúng tin tưởng bạn đủ để nói với bạn. Sự tin tưởng đó là điều quan trọng nhất. Xin đừng từ chối nó.\"",
+    parentsSign:"— Thông điệp gửi đến mọi bậc phụ huynh muốn hiểu",
+    mythsLabel:"Niềm tin phổ biến — và bằng chứng cho thấy gì",
+    mythsTitle:"Các khuôn mẫu và kỳ thị cản trở sự hiểu biết",
+    mythTag:"Niềm tin phổ biến", truthTag:"Những gì chúng ta biết",
+    mythTag2:"Niềm tin phổ biến", truthTag2:"Những gì chúng ta biết",
+    mythTag3:"Niềm tin phổ biến", truthTag3:"Những gì chúng ta biết",
+    mythTag4:"Niềm tin phổ biến", truthTag4:"Những gì chúng ta biết",
+    m1m:"\"Bệnh tâm thần là kết quả của tính cách yếu đuối hoặc thiếu tự kỷ luật.\"",
+    m1t:"Các tình trạng sức khỏe tâm thần là thực tế y tế với nguyên nhân sinh học, môi trường và xã hội — giống như bệnh tiểu đường hoặc gãy xương. Tính cách không liên quan gì đến điều này.",
+    m2m:"\"Các gia đình Châu Á không có những vấn đề này. Đây là một khái niệm phương Tây.\"",
+    m2t:"Trầm cảm và lo âu là các tình trạng toàn cầu. Người trẻ trên khắp Đông và Đông Nam Á trải qua các tình trạng sức khỏe tâm thần ở tỷ lệ tương tự — họ chỉ đơn giản là ít có khả năng nhận được điều trị hơn nhiều.",
+    m3m:"\"Nếu họ ăn tốt, tập thể dục và tập trung vào việc học, họ sẽ ổn thôi.\"",
+    m3t:"Thói quen lành mạnh hỗ trợ sức khỏe nhưng không thể thay thế điều trị cho bệnh trầm cảm lâm sàng hoặc lo âu. Nói với ai đó 'hãy cố gắng hơn' khi họ đang vật lộn về mặt y tế có thể làm sâu thêm nỗi đau khổ của họ.",
+    m4m:"\"Gặp nhà trị liệu có nghĩa là cả cộng đồng sẽ biết. Điều đó mang lại sự xấu hổ cho gia đình.\"",
+    m4t:"Chăm sóc sức khỏe tâm thần là bảo mật theo pháp luật. Các nhà trị liệu không thể chia sẻ thông tin của con bạn mà không có sự đồng ý. Tìm kiếm sự giúp đỡ là một quyết định riêng tư — và thường ngăn chặn các cuộc khủng hoảng lớn hơn sau này.",
+    tipsLabel:"Nếu con bạn đến gặp bạn",
+    t1:"Lắng nghe mà không ngay lập tức cố giải quyết. Được lắng nghe thường là điều chữa lành nhất.",
+    t2:"Tránh những câu như \"không có gì để buồn cả\" hoặc \"nghĩ xem tôi đã cố gắng bao nhiêu cho con\". Những điều này đóng cửa cuộc trò chuyện.",
+    t3:"Hỏi: \"Con cần gì từ bố/mẹ ngay bây giờ?\" Hãy để chúng dẫn dắt bạn.",
+    t4:"Hỗ trợ chúng tiếp cận dịch vụ chăm sóc chuyên nghiệp là một trong những điều yêu thương nhất bạn có thể làm với tư cách là cha mẹ.",
+    resLabel:"Bắt đầu từ đâu",
+    resTitle:"Tài nguyên <em>thấu hiểu</em> bạn.",
+    resIntro:"Bạn không cần phải tìm nhà trị liệu vào ngày mai. Bắt đầu nhỏ — đọc, lắng nghe, liên hệ ẩn danh. Mỗi bước đều quan trọng.",
+    res1:"Gọi hoặc nhắn tin 988. Miễn phí, bảo mật. Có hỗ trợ tiếng Quan thoại và Quảng Đông. Không cần bảo hiểm.",
+    res2:"Tìm các nhà trị liệu hiểu nền tảng văn hóa của bạn. Được xây dựng bởi và cho cộng đồng Châu Á.",
+    res3:"Giáo dục sức khỏe tâm thần và hỗ trợ đồng đẳng có hiểu biết văn hóa dành riêng cho cộng đồng người Mỹ gốc Á.",
+    res4:"Nói chuyện với người lắng nghe được đào tạo, ẩn danh và miễn phí. Không cần hẹn — chỉ là một cuộc trò chuyện.",
+    res5:"Hỗ trợ khủng hoảng cho người trẻ LGBTQ+ điều hướng áp lực gia đình và văn hóa.",
+    res6:"Tìm kiếm nhà trị liệu có năng lực văn hóa Châu Á theo địa điểm, ngôn ngữ và phạm vi bảo hiểm.",
+    stepsLabel:"Bắt đầu nhỏ",
+    stepsTitle:"Bạn không cần phải hiểu tất cả mọi thứ. Bắt đầu từ đây.",
+    s1h:"Đặt tên cho những gì bạn đang cảm thấy", s1p:"Chỉ đơn giản thừa nhận \"Tôi đã vật lộn\" — ngay cả chỉ với chính mình — là một bước đầu tiên thực sự và có ý nghĩa.",
+    s2h:"Khám phá ẩn danh", s2p:"Đọc gì đó. Thử một tài nguyên miễn phí. Duyệt qua. Không cam kết, không ai cần biết.",
+    s3h:"Liên hệ, theo thời gian của bạn", s3p:"Khi bạn sẵn sàng, liên hệ với đường dây hỗ trợ là bảo mật. Bạn quyết định chia sẻ bao nhiêu.",
+    s4h:"Truyền đi", s4p:"Nếu bạn biết ai đó đang lặng lẽ vật lộn, chia sẻ trang này có thể là điều quan trọng nhất bạn làm hôm nay.",
+    closingLabel:"Suy nghĩ cuối",
+    closingTitle:"Chăm sóc bản thân là cách bạn chăm sóc những người bạn yêu thương.",
+    closingSub:"Nếu bạn hoặc ai đó bạn biết cần nói chuyện với ai đó ngay bây giờ, hãy liên hệ.",
+    crisisLabel:"Gọi hoặc nhắn tin, 24/7 — miễn phí & bảo mật",
+    crisisSub:"Đường dây khủng hoảng · Có hỗ trợ tiếng Việt",
+    footer1:"Trang này được tạo ra để hỗ trợ sức khỏe tâm thần trong các cộng đồng người Mỹ gốc Á.",
+    footerShare:"Tự do chia sẻ · Share freely · 자유롭게 공유 · 自由に共有 · 自由分享"
+  }
+};
+
+function setLang(lang) {
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector('.lang-btn[onclick="setLang(\''+lang+'\')"]').classList.add('active');
+  const t = Object.assign({}, T.en, T[lang] || {});
+  document.querySelectorAll('[data-key]').forEach(el => {
+    const k = el.getAttribute('data-key');
+    if (t[k] !== undefined) el.innerHTML = t[k];
+  });
+  const fonts = {zh:"'Noto Serif SC',serif", ko:"'Noto Serif KR',serif", ja:"'Noto Serif JP',serif"};
+  document.body.style.fontFamily = fonts[lang] || "'Noto Serif',Georgia,serif";
+  // update lang attribute
+  document.documentElement.lang = lang;
+}
+
+// Fix nav link scroll offset for fixed bars
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', function(e) {
+    const target = document.querySelector(this.getAttribute('href'));
+    if (target) {
+      e.preventDefault();
+      const offset = 90; // height of lang bar + nav
+      const top = target.getBoundingClientRect().top + window.scrollY - offset;
+      window.scrollTo({top, behavior:'smooth'});
+    }
+  });
+});
+</script>
+</body>
+</html>
